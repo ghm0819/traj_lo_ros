@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 参数配置 -->
+    <arg name="lidar_topic" default="/livox/lidar" />
+    <arg name="lidar_type" default="livox" />
+    
+    <!-- 加载对应传感器的配置文件 -->
+    <arg name="config_file" default="$(find traj_lo)/config/config_$(arg lidar_type).yaml" />
+    
+    <!-- 配置参数 -->
+    <param name="lidar_topic" value="$(arg lidar_topic)" />
+    <param name="config_file" value="$(arg config_file)" />
+    
+    <!-- 启动轨迹跟踪节点 -->
+    <node pkg="traj_lo" type="traj_lo" name="traj_lo" output="screen">
+        <param name="lidar_topic" value="$(arg lidar_topic)" />
+        <param name="lidar_type" value="$(arg lidar_type)" />
+        <param name="config_file" value="$(arg config_file)" />
+    </node>
+
+    <arg name="rviz" default="true" />
+    <group if="$(arg rviz)">
+        <node pkg="rviz" type="rviz" name="traj_rviz" args="-d $(find traj_lo)/config/rviz.rviz" />
+    </group>
+   
+</launch>
